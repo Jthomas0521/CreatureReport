@@ -8,7 +8,8 @@ SPORTSFEED_API_KEY = os.getenv("SPORTSFEED_API_KEY")
 
 
 def get_live_nba_scores():
-    url = "https://api.mysportsfeed.com/v2.1/pull/nba/current/games.json"
+    # url = "https://api.mysportsfeed.com/v2.1/pull/nba/current/games.json"
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
     headers = {
         "Authorization": SPORTSFEED_API_KEY
     }

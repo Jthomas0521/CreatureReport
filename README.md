@@ -62,7 +62,7 @@ Create a .env file in the root:
 env
 Copy
 Edit
-MYSPORTS_API_KEY=Basic your_base64_api_key_here
+SPORTSFEED_API_KEY=Basic your_base64_api_key_here
 Or copy the template:
 
 bash
@@ -103,7 +103,7 @@ env
 Copy
 Edit
 # Rename this file to .env and insert your MySportsFeeds key
-MYSPORTS_API_KEY=Basic your_base64_api_key_here
+SPORTSFEED_API_KEY=Basic your_base64_api_key_here
 
 📌 Notes
 Activate the NBA feed in your MySportsFeeds account
