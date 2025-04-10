@@ -43,7 +43,7 @@ CreatureReport/
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/CreatureReport.git
+git clone https://github.com/Jthomas0521/CreatureReport.git
 cd CreatureReport
 2. Set up virtual environment
 bash
