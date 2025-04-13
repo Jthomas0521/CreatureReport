@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: creaturereport-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn src.backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+  streamlit:
+    build: .
+    container_name: creaturereport-frontend
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    command: streamlit run src/frontend/Home.py --server.port=8501 --server.enableCORS=false
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:14
+    container_name: creaturereport-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bleacher_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

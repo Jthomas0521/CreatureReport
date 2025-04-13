@@ -1,40 +1,34 @@
 import requests
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-SPORTSFEED_API_KEY = os.getenv("SPORTSFEED_API_KEY")
 
 
 def get_live_nba_scores():
-    # url = "https://api.mysportsfeed.com/v2.1/pull/nba/current/games.json"
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
-    headers = {
-        "Authorization": SPORTSFEED_API_KEY
-    }
 
-    params = {
-        "status": "inprogress"
-    }
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
 
-    response = requests.get(url, headers=headers, params=params, timeout=10)
-
-    if response.status_code == 200:
-        games = response.json().get("games", [])
+        data = response.json()
+        events = data.get("events", [])
         simplified = []
 
-        for game in games:
-            home = game["schedule"]["homeTeam"]["abbreviation"]
-            away = game["schedule"]["awayTeam"]["abbreviation"]
-            score = f"{game['score']['awayScore']} - {game['score']['homeScore']}"
-            status = game["schedule"]["status"]
+        for event in events:
+            competition = event["competitions"][0]
+            competitors = competition["competitors"]
+            team1 = competitors[0]["team"]["displayName"]
+            team2 = competitors[1]["team"]["displayName"]
+            score1 = competitors[0]["score"]
+            score2 = competitors[1]["score"]
+            status = competition["status"]["type"]["description"]
+
             simplified.append({
-                "home": home,
-                "away": away,
-                "score": score,
+                "team1": team1,
+                "team2": team2,
+                "score": f"{score1} - {score2}",
                 "status": status
             })
+
         return simplified
-    else:
+    except Exception as e:
+        print(f"Error fetching live scores: {e}")
         raise Exception("Failed to fetch live scores.")
